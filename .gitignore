@@ -1,0 +1,7 @@
+ref
+.cache/
+.hegel/
+hegel/libhegel/lib/
+*.bin
+*.dSYM/
+/tests.bin
