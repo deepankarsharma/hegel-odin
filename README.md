@@ -31,6 +31,10 @@ Reproduce with: hegel.Settings{reproduce = "AXicY2VgYGBkZOBiZEBhMAAAAd8AIQ=="}
 
 ## Setup
 
+Use Odin `dev-2026-08` (`dev-2026-06` through `dev-2026-08` work).
+`dev-2026-09` has a compiler regression that rejects named arguments whose type
+depends on a `$T` parameter, e.g. `hegel.integers(u16, min_value = 100)`.
+
 Hegel links libhegel statically. Build it once (requires `cargo`):
 
 ```
@@ -73,5 +77,5 @@ Generators include `integers`, `floats`, `booleans`, `text`, `characters`,
 
 ## Platform status
 
-Developed and tested on macOS (arm64). The Linux and Windows link lines in
-`hegel/libhegel/libhegel.odin` are untested.
+Tested on macOS (arm64) and Linux (x86_64). The Windows link line in
+`hegel/libhegel/libhegel.odin` is untested.
