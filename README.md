@@ -9,14 +9,13 @@ import "core:slice"
 import "core:testing"
 import hegel "hegel-odin/hegel"
 
-@(test)
-test_sort_matches_builtin :: proc(t: ^testing.T) {
-	hegel.test(t, proc(tc: ^hegel.Test_Case) {
-		xs := hegel.draw(tc, hegel.lists(hegel.integers(int)), "xs")
-		expected := slice.clone(xs)
-		slice.sort(expected)
-		hegel.expect(tc, slice.equal(my_sort(xs), expected))
-	})
+@(test) test_sort_matches_builtin :: proc(t: ^testing.T) { hegel.test(t, sort_matches_builtin) }
+
+sort_matches_builtin :: proc(tc: ^hegel.Test_Case) {
+	xs := hegel.draw(tc, hegel.lists(hegel.integers(int)), "xs")
+	expected := slice.clone(xs)
+	slice.sort(expected)
+	hegel.expect(tc, slice.equal(my_sort(xs), expected))
 }
 ```
 
@@ -54,6 +53,9 @@ odin test tests -vet -strict-style
 
 ## Writing properties
 
+- Write each property as a named `proc(tc: ^hegel.Test_Case)` and register it
+  with a one-line test: `@(test) test_x :: proc(t: ^testing.T) { hegel.test(t, x) }`.
+  An inline `proc` literal works too.
 - Draw values with `hegel.draw(tc, generator, "name")`.
 - Check with `hegel.expect`, `hegel.expect_value`, `hegel.fail`, `assert`,
   `panic`, or error-level `log` calls — each fails the test case at its
@@ -64,7 +66,7 @@ odin test tests -vet -strict-style
   the property entry are skipped. Hardware faults (bounds errors, nil
   dereferences) are not caught.
 - Configure runs with `hegel.Settings`, e.g.
-  `hegel.test(t, prop, {test_cases = 1000, seed = 42})`.
+  `hegel.test(t, x, {test_cases = 1000, seed = 42})`.
 - Use `hegel.run` to get a `Run_Result` instead of failing a `testing.T`.
 
 Generators include `integers`, `floats`, `booleans`, `text`, `characters`,
@@ -74,6 +76,12 @@ Generators include `integers`, `floats`, `booleans`, `text`, `characters`,
 `optional`, `mapped`, `filtered`, `flat_mapped`, `composite`, and
 `recursive`. Stateful systems can be tested with `run_state_machine` and
 `Pool`.
+
+## Example
+
+`integration_test/` is a small computational geometry library tested with
+Hegel fetched from GitHub. Its suite shows algebraic laws, differential
+testing, custom generators, and stateful testing; see its README.
 
 ## Platform status
 

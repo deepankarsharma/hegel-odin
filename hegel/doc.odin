@@ -11,14 +11,13 @@ fails, shrinks it to a minimal example:
 	import "core:testing"
 	import hegel "hegel-odin/hegel"
 
-	@(test)
-	test_sort_keeps_length :: proc(t: ^testing.T) {
-		hegel.test(t, proc(tc: ^hegel.Test_Case) {
-			xs := hegel.draw(tc, hegel.lists(hegel.integers(int)), "xs")
-			ys := slice.clone(xs)
-			slice.sort(ys)
-			hegel.expect(tc, len(xs) == len(ys))
-		})
+	@(test) test_sort_keeps_length :: proc(t: ^testing.T) { hegel.test(t, sort_keeps_length) }
+
+	sort_keeps_length :: proc(tc: ^hegel.Test_Case) {
+		xs := hegel.draw(tc, hegel.lists(hegel.integers(int)), "xs")
+		ys := slice.clone(xs)
+		slice.sort(ys)
+		hegel.expect(tc, len(xs) == len(ys))
 	}
 
 A failing property is reported through `core:testing` with the values that
